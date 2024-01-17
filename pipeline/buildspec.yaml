@@ -1,0 +1,5 @@
+version: 0.1
+phases:
+  build:
+    commands:
+      - mvn verify sonar:sonar -Dsonar.projectKey=devsecops-minfy_devsecops-minfy -Dsonar.organization=devsecops-minfy -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=7302d623d1157b3ebf7c1d41ba6b9a90c050ba73
