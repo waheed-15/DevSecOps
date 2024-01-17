@@ -1,5 +1,7 @@
 version: 0.2
-
+env:
+  secrets-manager:
+    TOKEN: sonarqube:sonartoken
 phases:
   install:
     commands:
@@ -10,4 +12,28 @@ phases:
       
   build:
     commands:
-      - mvn verify sonar:sonar -Dsonar.projectKey=waheed_devsecops -Dsonar.organization=waheed -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=9d5f8c0e408e6cf4a4aea82c45cd1f4986e47a1f
+      - mvn verify sonar:sonar -Dsonar.projectKey=waheed_devsecops -Dsonar.organization=waheed -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$TOKEN
+      - sleep 5
+      - |
+        quality_status=$(curl -s -u $TOKEN: https://sonarcloud.io/api/qualitygates/project_status?projectKey=waheed_devsecops | jq -r '.projectStatus.status')
+        echo "SonarCloud analysis status is $quality_status"; 
+        if [ "$quality_status" = "ERROR" ]; then exit 1; fi
+
+
+#Dynamic Application Security Scan (DAST scan) using OWASP ZAP
+
+    - |-
+        apt-get update
+        apt-get -y install wget
+        apt-get -y install default-jdk
+        wget https://github.com/zaproxy/zaproxy/releases/download/v2.11.1/ZAP_2.11.1_Linux.tar.gz
+        mkdir zap
+        tar -xvf ZAP_2.11.1_Linux.tar.gz
+        cd ZAP_2.11.1
+        ./zap.sh -cmd -quickurl https://fib-uat-pub-app.clari5.net/uac-ui/ -quickprogress -quickout ../zap_report.html 
+        
+#Storing DAST Reports in S3 bucket
+
+artifacts:
+  files:
+    - zap_report.html
