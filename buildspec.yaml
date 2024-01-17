@@ -2,4 +2,4 @@ version: 0.1
 phases:
   build:
     commands:
-      - mvn verify sonar:sonar -Dsonar.projectKey=zama-waheed -Dsonar.organization=zama-waheed -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=9d5f8c0e408e6cf4a4aea82c45cd1f4986e47a1f
+      - mvn verify sonar:sonar -Dsonar.projectKey=waheed_devsecops -Dsonar.organization=waheed -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=9d5f8c0e408e6cf4a4aea82c45cd1f4986e47a1f
