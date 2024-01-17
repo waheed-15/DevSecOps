@@ -1,5 +1,13 @@
-version: 0.1
+version: 0.2
+
 phases:
+  install:
+    commands:
+      - apt-get update
+      - apt-get install -y openjdk-17-jdk
+      - export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+      - export PATH=$JAVA_HOME/bin:$PATH
+      
   build:
     commands:
       - mvn verify sonar:sonar -Dsonar.projectKey=waheed_devsecops -Dsonar.organization=waheed -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=9d5f8c0e408e6cf4a4aea82c45cd1f4986e47a1f
